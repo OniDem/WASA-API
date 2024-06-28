@@ -58,7 +58,7 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<List<ProductEntity>?> ShowAllByCategory(CategoryEnum category)
+        public async Task<List<ProductEntity>?> ShowAllByCategory(string category)
         {
             if(ModelState.IsValid)
             {

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Services;
+using WASA_InfrastructureLib.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt =>
 {
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MiracleApi", Version = "Dev0.1" });
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "WASA-API", Version = "Dev0.1" });
     opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -40,17 +41,19 @@ builder.Services.AddSwaggerGen(opt =>
     });
 });
 
-builder.Services.AddDbContext<ApplicationContext>(options => { options.UseNpgsql("Host=45.8.96.144;Database=WASA_CRM;Username=icipt185;Password=bbyK3)vP=.\\TaN"); });
+builder.Services.AddDbContext<ApplicationContext>(options => { options.UseNpgsql("Host=45.8.96.144;Database=WASA_CRM;Username=icipt185;Password=bbyK3)vP=.\\TaN", b => b.MigrationsAssembly("WASA-API")); });
 
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<ReceiptRepository>();
 builder.Services.AddScoped<ShiftRepository>();
+builder.Services.AddScoped<CategoryRepository>();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<ReceiptService>();
 builder.Services.AddScoped<ShiftService>();
+builder.Services.AddScoped<CategoryService>();
 
 var app = builder.Build();
 
