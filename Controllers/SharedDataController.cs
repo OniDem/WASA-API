@@ -25,5 +25,15 @@ namespace WASA_API.Controllers
             }
             return null;
         }
+
+        [HttpPost]
+        public async Task<SharedDataEntity?> GetData(SharedDataRequest request)
+        {
+            if (ModelState.IsValid)
+            {
+                return await _sharedDataService.GetData(request);
+            }
+            return null;
+        }
     }
 }
