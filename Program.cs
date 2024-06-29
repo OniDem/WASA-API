@@ -48,12 +48,14 @@ builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<ReceiptRepository>();
 builder.Services.AddScoped<ShiftRepository>();
 builder.Services.AddScoped<CategoryRepository>();
+builder.Services.AddScoped<SharedDataRepository>();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<ReceiptService>();
 builder.Services.AddScoped<ShiftService>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<SharedDataService>();
 
 var app = builder.Build();
 
