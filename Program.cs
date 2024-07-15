@@ -1,12 +1,9 @@
 using Infrastructure;
 using Infrastructure.Repositories;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Services;
-using System.Configuration;
 using WASA_InfrastructureLib.Repositories;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt =>
 {
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "WASA-API", Version = "Dev0.1" });
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "WASA-API", Version = "Dev1.1" });
     opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
