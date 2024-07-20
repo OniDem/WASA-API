@@ -3,6 +3,7 @@ using Core.Entity;
 using DTO.Product;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using WASA_DTOLib.Product;
 
 namespace WASA_API.Controllers
 {
@@ -26,6 +27,8 @@ namespace WASA_API.Controllers
             }
             return null;
         }
+
+        // TODO: Remove productCode in request
 
         [HttpPut]
         public async Task<ProductEntity?> Update(string productCode, UpdateProductRequest request)
@@ -62,7 +65,17 @@ namespace WASA_API.Controllers
         {
             if(ModelState.IsValid)
             {
-                return await _productService.ShowAllByCategory(category);
+                return await _productService.ShowByCategory(category);
+            }
+            return null;
+        }
+
+        [HttpPost]
+        public async Task<IEnumerable<ProductEntity>?> ShowByQuery(GetProductByQueryRequest request)
+        {   
+            if (ModelState.IsValid)
+            {
+                return await _productService.ShowByQuery(request.Query);
             }
             return null;
         }
