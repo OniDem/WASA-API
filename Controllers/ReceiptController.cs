@@ -82,17 +82,17 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<List<ReceiptEntity>?> ShowCreatedByDate(ShowReceiptByDateRequest request)
+        public async Task<IEnumerable<ReceiptEntity>?> ShowCreatedByDate(ShowReceiptByDateRequest request)
         {
             if (ModelState.IsValid)
             {
-                return (List<ReceiptEntity>?)await _receiptService.ShowCreatedByDate(request.Date!.Value);
+                return await _receiptService.ShowCreatedByDate(request.Date!.Value);
             }
             return null;
         }
 
         [HttpPost]
-        public async Task<List<ReceiptEntity>?> ShowClosedByDate(ShowReceiptByDateRequest request)
+        public async Task<IEnumerable<ReceiptEntity>?> ShowClosedByDate(ShowReceiptByDateRequest request)
         {
             if (ModelState.IsValid)
             {
@@ -102,7 +102,7 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<List<ReceiptEntity>?> ShowPaymentByDate(ShowReceiptByDateRequest request)
+        public async Task<IEnumerable<ReceiptEntity>?> ShowPaymentByDate(ShowReceiptByDateRequest request)
         {
             if (ModelState.IsValid)
             {
