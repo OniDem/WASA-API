@@ -4,6 +4,7 @@ using DTO.Receipt;
 using DTO.User;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using WASA_DTOLib.Receipt;
 
 namespace WASA_API.Controllers
 {
@@ -71,7 +72,7 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ReceiptEntity?> ShowById([FromBody] GetReceiptByIdRequest request)
+        public async Task<ReceiptEntity?> ShowById(GetReceiptByIdRequest request)
         {
             if (ModelState.IsValid)
             {
@@ -81,31 +82,31 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<List<ReceiptEntity>?> ShowCreatedByDate([FromBody] DateTime date)
+        public async Task<List<ReceiptEntity>?> ShowCreatedByDate(ShowReceiptByDateRequest request)
         {
             if (ModelState.IsValid)
             {
-                return (List<ReceiptEntity>?)await _receiptService.ShowCreatedByDate(date);
+                return (List<ReceiptEntity>?)await _receiptService.ShowCreatedByDate(request.Date!.Value);
             }
             return null;
         }
 
         [HttpPost]
-        public async Task<List<ReceiptEntity>?> ShowClosedByDate([FromBody] DateTime date)
+        public async Task<List<ReceiptEntity>?> ShowClosedByDate(ShowReceiptByDateRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _receiptService.ShowClosedByDate(date);
+                return await _receiptService.ShowClosedByDate(request.Date!.Value);
             }
             return null;
         }
 
         [HttpPost]
-        public async Task<List<ReceiptEntity>?> ShowPaymentByDate([FromBody] DateTime date)
+        public async Task<List<ReceiptEntity>?> ShowPaymentByDate(ShowReceiptByDateRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _receiptService.ShowPaymentByDate(date);
+                return await _receiptService.ShowPaymentByDate(request.Date!.Value);
             }
             return null;
         }

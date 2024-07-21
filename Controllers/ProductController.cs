@@ -1,5 +1,4 @@
-﻿using Core.Const;
-using Core.Entity;
+﻿using Core.Entity;
 using DTO.Product;
 using Microsoft.AspNetCore.Mvc;
 using Services;
@@ -26,16 +25,16 @@ namespace WASA_API.Controllers
                 return await _productService.AddProduct(request);
             }
             return null;
-        }
+        }  
 
         // TODO: Remove productCode in request
 
         [HttpPut]
-        public async Task<ProductEntity?> Update(string productCode, UpdateProductRequest request)
+        public async Task<ProductEntity?> Update(UpdateProductRequest request)
         {
             if(ModelState.IsValid)
             {
-                return await _productService.UpdateProduct(productCode, request);
+                return await _productService.UpdateProduct(request.ProductCode, request);
             }
             return null;
         }
@@ -61,11 +60,11 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<List<ProductEntity>?> ShowAllByCategory(string category)
+        public async Task<List<ProductEntity>?> ShowByCategory(GetProductByQueryRequest request)
         {
             if(ModelState.IsValid)
             {
-                return await _productService.ShowByCategory(category);
+                return await _productService.ShowByCategory(request.Query);
             }
             return null;
         }
@@ -81,11 +80,11 @@ namespace WASA_API.Controllers
         }
 
         [HttpDelete]
-        public void Delete(string productCode)
+        public void Delete(DeleteProductRequest request)
         {
             if(ModelState.IsValid)
             {
-                _productService.Delete(productCode);
+                _productService.Delete(request.ProductCode);
             }
         }
     }
