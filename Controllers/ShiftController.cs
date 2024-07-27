@@ -19,7 +19,7 @@ namespace WASA_API.Controllers
         [HttpPost]
         public async Task<ShiftEntity?> OpenShift(OpenShiftRequest request)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 return await _shiftService.OpenShift(request);
             }
@@ -29,7 +29,7 @@ namespace WASA_API.Controllers
         [HttpPut]
         public async Task<ShiftEntity?> CloseShift(CloseShiftRequest request)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 return await _shiftService.CloseShift(request);
             }
@@ -39,11 +39,21 @@ namespace WASA_API.Controllers
         [HttpPost]
         public async Task<ShiftEntity?> ShowById(ShowByIdRequest request)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 return await _shiftService.ShowById(request);
             }
             return null;
+        }
+
+        [HttpPost]
+        public async Task<IEnumerable<ShiftEntity>> ShowAll()
+        {
+            if(ModelState.IsValid)
+            {
+                return await _shiftService.ShowAll();
+            }
+            return [];
         }
 
         [HttpPut]
