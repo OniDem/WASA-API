@@ -1,6 +1,7 @@
 ﻿using Core.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using WASA_CoreLib.ShowEntity;
 using WASA_DTOLib.Category;
 
 namespace WASA_API.Controllers
