@@ -36,5 +36,14 @@ namespace WASA_API.Controllers
             }
             return null;
         }
+
+        //[HttpDelete]
+        //public async Task Delete(DeleteCategoryRequest request)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        return _categoryService.Delete(request);
+        //    }
+        //}
     }
 }
