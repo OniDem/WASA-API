@@ -47,7 +47,7 @@ namespace WASA_API.Controllers
             return null;
         }
 
-        [HttpPost]
+        [HttpDelete]
         public void Delete(DeleteVisitRequest request)
         {
             if (ModelState.IsValid)
