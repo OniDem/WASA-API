@@ -38,8 +38,8 @@ builder.Services.AddSwaggerGen(opt =>
         }
     });
 });
-//Don`t update package to preview versions & change connectionString
-builder.Services.AddDbContext<ApplicationContext>(options => { options.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING"), b => b.MigrationsAssembly("WASA-API")); });
+//Don`t update package to preview versions & change connectionString (Environment.GetEnvironmentVariable("CONNECTION_STRING"))
+builder.Services.AddDbContext<ApplicationContext>(options => { options.UseNpgsql("Host=45.8.96.144;Database=WASA_CRM;Username=icipt185;Password=bbyK3)vP=.\\TaN", b => b.MigrationsAssembly("WASA-API")); });
 
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<ProductRepository>();
@@ -47,6 +47,8 @@ builder.Services.AddScoped<ReceiptRepository>();
 builder.Services.AddScoped<ShiftRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<SharedDataRepository>();
+builder.Services.AddScoped<OrganizationRepository>();
+builder.Services.AddScoped<VisitRepository>();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProductService>();
@@ -54,6 +56,8 @@ builder.Services.AddScoped<ReceiptService>();
 builder.Services.AddScoped<ShiftService>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<SharedDataService>();
+builder.Services.AddScoped<OrganizationService>();
+builder.Services.AddScoped<VisitService>();
 Console.WriteLine(builder.Environment.EnvironmentName);
 
 var app = builder.Build();
