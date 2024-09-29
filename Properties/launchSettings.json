@@ -9,7 +9,17 @@
     }
   },
   "profiles": {
-    
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://0.0.0.0:5083",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CONNECTION_STRING": "Host=45.8.96.144;Database=WASA_CRM;Username=icipt185;Password=bbyK3)vP=.\\TaN"
+      }
+    },
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,
