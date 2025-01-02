@@ -2,6 +2,7 @@
 using DTO.Product;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using WASA_CoreLib.Entity;
 using WASA_DTOLib.Product;
 
 namespace WASA_API.Controllers
@@ -18,65 +19,83 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ProductEntity?> Add(AddProductRequest request)
+        public async Task<ServerResponseEntity> Add(AddProductRequest request)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return await _productService.AddProduct(request);
+                var data = await _productService.AddProduct(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }  
 
         // TODO: Remove productCode in request
 
         [HttpPut]
-        public async Task<ProductEntity?> Update(UpdateProductRequest request)
+        public async Task<ServerResponseEntity> Update(UpdateProductRequest request)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return await _productService.UpdateProduct(request.ProductCode, request);
+                var data = await _productService.UpdateProduct(request.ProductCode, request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<ProductEntity?> ShowByProductCode(GetProductByCodeRequest request)
+        public async Task<ServerResponseEntity> ShowByProductCode(GetProductByCodeRequest request)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return await _productService.ShowByProductCode(request.ProductCode);
+                var data = await _productService.ShowByProductCode(request.ProductCode);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<List<ProductEntity>?> ShowAll()
+        public async Task<ServerResponseEntity> ShowAll()
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return await _productService.ShowAll();
+                var data = await _productService.ShowAll();
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<List<ProductEntity>?> ShowByCategory(GetProductByQueryRequest request)
+        public async Task<ServerResponseEntity> ShowByCategory(GetProductByQueryRequest request)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return await _productService.ShowByCategory(request.Query);
+                var data = await _productService.ShowByCategory(request.Query);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<IEnumerable<ProductEntity>?> ShowByQuery(GetProductByQueryRequest request)
+        public async Task<ServerResponseEntity> ShowByQuery(GetProductByQueryRequest request)
         {   
             if (ModelState.IsValid)
             {
-                return await _productService.ShowByQuery(request.Query);
+                var data = await _productService.ShowByQuery(request.Query);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpDelete]

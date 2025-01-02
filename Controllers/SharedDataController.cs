@@ -17,23 +17,29 @@ namespace WASA_API.Controllers
         }
 
         [HttpPut]
-        public async Task<SharedDataEntity?> Update(SharedDataRequest request)
-        {
-            if(ModelState.IsValid)
-            {
-                return await _sharedDataService.Update(request);
-            }
-            return null;
-        }
-
-        [HttpPost]
-        public async Task<SharedDataEntity?> GetData(SharedDataRequest request)
+        public async Task<ServerResponseEntity> Update(SharedDataRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _sharedDataService.GetData(request);
+                var data = await _sharedDataService.Update(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
+        }
+
+        [HttpPost]
+        public async Task<ServerResponseEntity> GetData(SharedDataRequest request)
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _sharedDataService.GetData(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
+            }
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
     }
 }

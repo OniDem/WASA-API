@@ -4,6 +4,7 @@ using DTO.Receipt;
 using DTO.User;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using WASA_CoreLib.Entity;
 using WASA_DTOLib.Receipt;
 
 namespace WASA_API.Controllers
@@ -21,94 +22,120 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ReceiptEntity?> Add(AddReceiptRequest request)
+        public async Task<ServerResponseEntity> Add(AddReceiptRequest request)
         {
             if (ModelState.IsValid)
             {
-                var receipt = await _receiptService.Add(request);
-                return receipt;
+                var data =  await _receiptService.Add(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPut]
-        public async Task<ReceiptEntity?> Close([FromBody] GetReceiptByIdRequest request)
+        public async Task<ServerResponseEntity> Close([FromBody] GetReceiptByIdRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _receiptService.Close(request);
+                var data = await _receiptService.Close(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPut]
-        public async Task<ReceiptEntity?> Payment(PaymentReceiptRequest request)
+        public async Task<ServerResponseEntity> Payment(PaymentReceiptRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _receiptService.Payment(request);
+                var data = await _receiptService.Payment(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPut]
-        public async Task<ReceiptEntity?> Cancel(CancelReceiptRequest request)
+        public async Task<ServerResponseEntity> Cancel(CancelReceiptRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _receiptService.Cancel(request);
+                var data = await _receiptService.Cancel(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPut]
-        public async Task<ReceiptEntity?> AddProducts(AddProductToReceiptRequest request)
+        public async Task<ServerResponseEntity> AddProducts(AddProductToReceiptRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _receiptService.AddProducts(request);
+                var data = await _receiptService.AddProducts(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<ReceiptEntity?> ShowById(GetReceiptByIdRequest request)
+        public async Task<ServerResponseEntity> ShowById(GetReceiptByIdRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _receiptService.ShowById(request.Id);
+                var data = await _receiptService.ShowById(request.Id);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;    
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<IEnumerable<ReceiptEntity>?> ShowCreatedByDate(ShowReceiptByDateRequest request)
+        public async Task<ServerResponseEntity> ShowCreatedByDate(ShowReceiptByDateRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _receiptService.ShowCreatedByDate(request.Date!.Value);
+                var data = await _receiptService.ShowCreatedByDate(request.Date!.Value);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<IEnumerable<ReceiptEntity>?> ShowClosedByDate(ShowReceiptByDateRequest request)
+        public async Task<ServerResponseEntity> ShowClosedByDate(ShowReceiptByDateRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _receiptService.ShowClosedByDate(request.Date!.Value);
+                var data = await _receiptService.ShowClosedByDate(request.Date!.Value);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<IEnumerable<ReceiptEntity>?> ShowPaymentByDate(ShowReceiptByDateRequest request)
+        public async Task<ServerResponseEntity> ShowPaymentByDate(ShowReceiptByDateRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _receiptService.ShowPaymentByDate(request.Date!.Value);
+                var data = await _receiptService.ShowPaymentByDate(request.Date!.Value);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
     }
 }

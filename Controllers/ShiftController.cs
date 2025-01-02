@@ -2,6 +2,7 @@
 using DTO.Shift;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using WASA_CoreLib.Entity;
 
 namespace WASA_API.Controllers
 {
@@ -17,83 +18,108 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ShiftEntity?> OpenShift(OpenShiftRequest request)
+        public async Task<ServerResponseEntity> OpenShift(OpenShiftRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _shiftService.OpenShift(request);
+                var data = await _shiftService.OpenShift(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
+
         }
 
         [HttpPut]
-        public async Task<ShiftEntity?> CloseShift(CloseShiftRequest request)
+        public async Task<ServerResponseEntity> CloseShift(CloseShiftRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _shiftService.CloseShift(request);
+                var data = await _shiftService.CloseShift(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<ShiftEntity?> ShowById(ShowByIdRequest request)
+        public async Task<ServerResponseEntity> ShowById(ShowByIdRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _shiftService.ShowById(request);
+                var data = await _shiftService.ShowById(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<IEnumerable<ShiftEntity>> ShowAll()
+        public async Task<ServerResponseEntity> ShowAll()
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return await _shiftService.ShowAll();
+                var data = await _shiftService.ShowAll();
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return [];
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPut]
-        public async Task<ShiftEntity?> AddReceiptToShift(AddReceiptToShiftRequest request)
+        public async Task<ServerResponseEntity> AddReceiptToShift(AddReceiptToShiftRequest request)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return await _shiftService.AddReceiptToShift(request);
+                var data = await _shiftService.AddReceiptToShift(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPut]
-        public async Task<ShiftEntity?> InsertCash(CashOperationRequest request)
+        public async Task<ServerResponseEntity> InsertCash(CashOperationRequest request)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return await _shiftService.InsertCash(request);
+                var data = await _shiftService.InsertCash(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPut]
-        public async Task<ShiftEntity?> ExtractCash(CashOperationRequest request)
+        public async Task<ServerResponseEntity> ExtractCash(CashOperationRequest request)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return await _shiftService.ExtractCash(request);
+                var data = await _shiftService.ExtractCash(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPut]
-        public async Task<ShiftEntity?> AcquiringApprove(AcquiringApproveRequest request)
+        public async Task<ServerResponseEntity> AcquiringApprove(AcquiringApproveRequest request)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return await _shiftService.AcquiringApprove(request);
+                var data = await _shiftService.AcquiringApprove(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
     }
 }

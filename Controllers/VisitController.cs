@@ -18,33 +18,42 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<VisitEntity?> Add(AddVisitRequest request)
-        {
-            if(ModelState.IsValid)
-            {
-                return await _visitService.Add(request);
-            }
-            return null;
-        }
-
-        [HttpPost]
-        public async Task<VisitEntity?> ShowById(DTO.Shift.ShowByIdRequest request)
+        public async Task<ServerResponseEntity> Add(AddVisitRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _visitService.ShowById(new() {  Id = request.Id});
+                var data = await _visitService.Add(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<IEnumerable<VisitEntity>?> ShowAll()
+        public async Task<ServerResponseEntity> ShowById(DTO.Shift.ShowByIdRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _visitService.ShowAll();
+                var data = await _visitService.ShowById(new() { Id = request.Id });
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
+        }
+
+        [HttpPost]
+        public async Task<ServerResponseEntity> ShowAll()
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _visitService.ShowAll();
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
+            }
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpDelete]

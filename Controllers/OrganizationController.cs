@@ -17,63 +17,81 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<OrganizationEntity?> Create(AddOrganizationRequest request)
+        public async Task<ServerResponseEntity> Create(AddOrganizationRequest request)
         {
             if(ModelState.IsValid)
             {
-                return await _organizationService.Create(request);
+                var data = await _organizationService.Create(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPut]
-        public async Task<OrganizationEntity?> AddBilling(AddBillingRequest request)
+        public async Task<ServerResponseEntity> AddBilling(AddBillingRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _organizationService.AddBilling(request);
+                var data = await _organizationService.AddBilling(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPut]
-        public async Task<OrganizationEntity?> AddStaff(AddStaffRequest request)
+        public async Task<ServerResponseEntity> AddStaff(AddStaffRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _organizationService.AddStaff(request);
+                var data = await _organizationService.AddStaff(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPut]
-        public async Task<OrganizationEntity?> AddShift(AddShiftRequest request)
+        public async Task<ServerResponseEntity> AddShift(AddShiftRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _organizationService.AddShift(request);
+                var data = await _organizationService.AddShift(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<OrganizationEntity?> ShowById(DTO.Shift.ShowByIdRequest request)
+        public async Task<ServerResponseEntity> ShowById(DTO.Shift.ShowByIdRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _organizationService.ShowById(new() { OrganizationId = request.Id });
+                var data = await _organizationService.ShowById(new() { OrganizationId = request.Id });
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<IEnumerable<OrganizationEntity>?> ShowAll()
+        public async Task<ServerResponseEntity> ShowAll()
         {
             if (ModelState.IsValid)
             {
-                return await _organizationService.ShowAll();
+                var data = await _organizationService.ShowAll();
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpDelete]

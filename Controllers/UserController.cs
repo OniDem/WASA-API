@@ -1,7 +1,7 @@
-﻿using Core.Entity;
-using DTO.User;
+﻿using DTO.User;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using WASA_CoreLib.Entity;
 
 namespace WASA_API.Controllers
 {
@@ -17,46 +17,55 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<UserEntity?> RegUser([FromBody] RegUserRequest request)
+        public async Task<ServerResponseEntity> RegUser([FromBody] RegUserRequest request)
         {
             if (ModelState.IsValid)
             {
-               return await _userService.RegUser(request);
+                var data = await _userService.RegUser(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<UserEntity?> AuthUser([FromBody] AuthUserRequest request)
+        public async Task<ServerResponseEntity> AuthUser([FromBody] AuthUserRequest request)
         {
             if (ModelState.IsValid)
             {
-                var user = await _userService.AuthUser(request);
-                return user;
+                var data = await _userService.AuthUser(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<UserEntity?> GrantAccessUser([FromBody] GrantAccessUserRequest request)
+        public async Task<ServerResponseEntity> GrantAccessUser([FromBody] GrantAccessUserRequest request)
         {
             if (ModelState.IsValid)
             {
-                var user = await _userService.GrantAccessUser(request);
-                return user;
+                var data = await _userService.GrantAccessUser(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPut]
-        public async Task<UserEntity?> UpdateUser(int id, UpdateUserRequest request)
+        public async Task<ServerResponseEntity> UpdateUser(int id, UpdateUserRequest request)
         {
             if (ModelState.IsValid)
             {
-                var user = await _userService.UpdateUser(id, request);
-                return user;
+                var data = await _userService.UpdateUser(id, request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpDelete]

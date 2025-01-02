@@ -1,8 +1,10 @@
 ﻿using Core.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using WASA_CoreLib.Entity;
 using WASA_CoreLib.ShowEntity;
 using WASA_DTOLib.Category;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WASA_API.Controllers
 {
@@ -18,23 +20,29 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<List<CategoryShowEntity?>> GetAll()
+        public async Task<ServerResponseEntity> GetAll()
         {
             if (ModelState.IsValid)
             {
-                return await _categoryService.GetAll();
+                var data = await _categoryService.GetAll();
+                if(data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [HttpPost]
-        public async Task<CategoryShowEntity> Add(AddCategoryRequest request)
+        public async Task<ServerResponseEntity> Add(AddCategoryRequest request)
         {
             if (ModelState.IsValid)
             {
-                return await _categoryService.Add(request);
+                var data = await _categoryService.Add(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
-            return null;
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         //[HttpDelete]
