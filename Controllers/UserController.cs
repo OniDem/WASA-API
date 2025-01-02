@@ -17,7 +17,7 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ServerResponseEntity> RegUser([FromBody] RegUserRequest request)
+        public async Task<ServerResponseEntity> RegUser(RegUserRequest request)
         {
             if (ModelState.IsValid)
             {
@@ -30,7 +30,7 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ServerResponseEntity> AuthUser([FromBody] AuthUserRequest request)
+        public async Task<ServerResponseEntity> AuthUser(AuthUserRequest request)
         {
             if (ModelState.IsValid)
             {
@@ -43,7 +43,7 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ServerResponseEntity> GrantAccessUser([FromBody] GrantAccessUserRequest request)
+        public async Task<ServerResponseEntity> GrantAccessUser(GrantAccessUserRequest request)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +69,7 @@ namespace WASA_API.Controllers
         }
 
         [HttpDelete]
-        public async Task DeleteUser([FromBody] int id)
+        public async Task DeleteUser(int id)
         {
             await _userService.Delete(id);
         }
