@@ -39,7 +39,7 @@ builder.Services.AddSwaggerGen(opt =>
     });
 });
 //Don`t update package to preview versions & change connectionString (Environment.GetEnvironmentVariable("CONNECTION_STRING"))
-builder.Services.AddDbContext<ApplicationContext>(options => { options.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING"), b => b.MigrationsAssembly("WASA-API")); });
+builder.Services.AddDbContext<ApplicationContext>(options => { options.UseNpgsql("Host = 188.225.39.77; Database = WASADATA; Username = velvetspider195; Password = LZl~?OYGQ{lv5d", b => b.MigrationsAssembly("WASA-API")); });
 
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<ProductRepository>();
