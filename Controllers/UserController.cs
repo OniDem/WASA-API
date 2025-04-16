@@ -1,4 +1,5 @@
-﻿using DTO.User;
+﻿using DTO.Shift;
+using DTO.User;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using WASA_CoreLib.Entity;
@@ -61,6 +62,20 @@ namespace WASA_API.Controllers
             if (ModelState.IsValid)
             {
                 var data = await _userService.UpdateUser(id, request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
+            }
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
+        }
+
+
+        [HttpPost]
+        public async Task<ServerResponseEntity> GetUserDataById(ShowByIdRequest request)
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _userService.GetUserDataById(request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
