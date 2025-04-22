@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DTO.Shift;
+using Microsoft.AspNetCore.Mvc;
 using Services;
 using WASA_CoreLib.Entity;
 using WASA_DTOLib.Organization;
@@ -93,6 +94,20 @@ namespace WASA_API.Controllers
             }
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
+
+        [HttpPost]
+        public async Task<ServerResponseEntity> CashBoxOperation(CashBoxOperationRequest request)
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _organizationService.CashBoxOperation(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
+            }
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
+        }
+
 
         [HttpDelete]
         public void Delete(DeleteOrganizationRequest request)
