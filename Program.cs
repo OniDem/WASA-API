@@ -48,7 +48,7 @@ builder.Services.AddScoped<ShiftRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<SharedDataRepository>();
 builder.Services.AddScoped<OrganizationRepository>();
-builder.Services.AddScoped<VisitRepository>();
+builder.Services.AddScoped<CompatibleRepository>();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ProductService>();
@@ -57,7 +57,7 @@ builder.Services.AddScoped<ShiftService>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<SharedDataService>();
 builder.Services.AddScoped<OrganizationService>();
-builder.Services.AddScoped<VisitService>();
+builder.Services.AddScoped<CompatibleService>();
 Console.WriteLine(builder.Environment.EnvironmentName);
 
 var app = builder.Build();

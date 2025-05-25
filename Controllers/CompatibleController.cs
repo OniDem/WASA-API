@@ -1,28 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services;
 using WASA_CoreLib.Entity;
-using WASA_DTOLib.Visit;
-using DTO.Shift;
+using WASA_DTOLib.Compatible;
 
 namespace WASA_API.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class VisitController : ControllerBase
+    public class CompatibleController : ControllerBase
     {
-        private readonly VisitService _visitService;
+        private readonly CompatibleService _compatibleService;
 
-        public VisitController(VisitService visitService)
+        public CompatibleController(CompatibleService compatibleService)
         {
-            _visitService = visitService;
+            _compatibleService = compatibleService;
         }
 
         [HttpPost]
-        public async Task<ServerResponseEntity> Add(AddVisitRequest request)
+        public async Task<ServerResponseEntity> Add(AddCompatibleRequest request)
         {
             if (ModelState.IsValid)
             {
-                var data = await _visitService.Add(request);
+                var data = await _compatibleService.Add(request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -31,11 +30,11 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ServerResponseEntity> ShowById(DTO.Shift.ShowByIdRequest request)
+        public async Task<ServerResponseEntity> GetModelsByModelCodeRequest(GetModelsByModelCodeRequest request)
         {
             if (ModelState.IsValid)
             {
-                var data = await _visitService.ShowById(new() { Id = request.Id });
+                var data = await _compatibleService.GetModelsByModelCodeRequest(request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -43,26 +42,17 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
-        [HttpPost]
-        public async Task<ServerResponseEntity> ShowAll()
+        [HttpPut]
+        public async Task<ServerResponseEntity> Update(UpdateCompatibleRequest request)
         {
             if (ModelState.IsValid)
             {
-                var data = await _visitService.ShowAll();
+                var data = await _compatibleService.Update(request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
-        }
-
-        [HttpDelete]
-        public void Delete(DeleteVisitRequest request)
-        {
-            if (ModelState.IsValid)
-            {
-                _visitService.Delete(request);
-            }
         }
     }
 }

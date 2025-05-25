@@ -31,8 +31,6 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }  
 
-        // TODO: Remove productCode in request
-
         [HttpPut]
         public async Task<ServerResponseEntity> Update(UpdateProductRequest request)
         {
@@ -52,6 +50,19 @@ namespace WASA_API.Controllers
             if (ModelState.IsValid)
             {
                 var data = await _productService.ShowByProductCode(request.ProductCode);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
+            }
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
+        }
+
+        [HttpPut]
+        public async Task<ServerResponseEntity> ProductDeduction(DeductionProductRequest request)
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _productService.ProductDeduction(request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
