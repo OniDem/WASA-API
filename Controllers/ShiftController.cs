@@ -83,32 +83,6 @@ namespace WASA_API.Controllers
         }
 
         [HttpPut]
-        public async Task<ServerResponseEntity> InsertCash(CashOperationRequest request)
-        {
-            if (ModelState.IsValid)
-            {
-                var data = await _shiftService.InsertCash(request);
-                if (data != null)
-                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
-                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
-            }
-            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
-        }
-
-        [HttpPut]
-        public async Task<ServerResponseEntity> ExtractCash(CashOperationRequest request)
-        {
-            if (ModelState.IsValid)
-            {
-                var data = await _shiftService.ExtractCash(request);
-                if (data != null)
-                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
-                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
-            }
-            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
-        }
-
-        [HttpPut]
         public async Task<ServerResponseEntity> AcquiringApprove(AcquiringApproveRequest request)
         {
             if (ModelState.IsValid)
