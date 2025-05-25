@@ -277,7 +277,7 @@ namespace WASA_API.Migrations
                     b.Property<int>("CompatibleType")
                         .HasColumnType("integer");
 
-                    b.Property<string[]>("ModelCodes")
+                    b.Property<List<string>>("ModelCodes")
                         .IsRequired()
                         .HasColumnType("text[]");
 

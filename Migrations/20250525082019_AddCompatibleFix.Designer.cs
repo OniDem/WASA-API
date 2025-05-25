@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace WASA_API.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20250524135819_AddCompatible")]
-    partial class AddCompatible
+    [Migration("20250525082019_AddCompatibleFix")]
+    partial class AddCompatibleFix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -280,7 +280,7 @@ namespace WASA_API.Migrations
                     b.Property<int>("CompatibleType")
                         .HasColumnType("integer");
 
-                    b.Property<string[]>("ModelCodes")
+                    b.Property<List<string>>("ModelCodes")
                         .IsRequired()
                         .HasColumnType("text[]");
 
