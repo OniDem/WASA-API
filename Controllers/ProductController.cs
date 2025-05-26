@@ -3,6 +3,7 @@ using DTO.Product;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using WASA_CoreLib.Entity;
+using WASA_DTOLib.Compatible;
 using WASA_DTOLib.Product;
 
 namespace WASA_API.Controllers
@@ -84,6 +85,19 @@ namespace WASA_API.Controllers
         }
 
         [HttpPost]
+        public async Task<ServerResponseEntity> ShowAllModelCodes()
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _productService.ShowAllModelCodes();
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
+            }
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
+        }
+
+        [HttpPost]
         public async Task<ServerResponseEntity> ShowByCategory(GetProductByQueryRequest request)
         {
             if (ModelState.IsValid)
@@ -102,6 +116,19 @@ namespace WASA_API.Controllers
             if (ModelState.IsValid)
             {
                 var data = await _productService.ShowByQuery(request.Query);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
+            }
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
+        }
+
+        [HttpPost]
+        public async Task<ServerResponseEntity> ShowByModelCodes(GetModelsByModelCodeRequest request)
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _productService.ShowByModelCodes(request.ModelCode);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
