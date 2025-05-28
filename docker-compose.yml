@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  backend:
+    image: mcr.microsoft.com/dotnet/samples:aspnetapp
+    ports:
+      - 5083
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5086
+    volumes:
+      - ~/.aspnet/https:/https:ro
