@@ -1,8 +1,11 @@
+using Asp.Versioning;
 using Infrastructure;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Services;
+using StudentsManagementApi.Swagger;
 using WASA_InfrastructureLib.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,7 +40,24 @@ builder.Services.AddSwaggerGen(opt =>
             new string[]{}
         }
     });
+    opt.OperationFilter<SwaggerDefaultValues>();
 });
+
+builder.Services.AddApiVersioning(opt =>
+{
+    opt.DefaultApiVersion = new ApiVersion(1, 0);
+    opt.AssumeDefaultVersionWhenUnspecified = true;
+    opt.ReportApiVersions = true;
+    opt.ApiVersionReader = new UrlSegmentApiVersionReader();
+
+    //ApiVersionReader.Combine(new HeaderApiVersionReader("x-api-version"), new QueryStringApiVersionReader("api-version"));
+});
+builder.Services.AddApiVersioning().AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'VVV";
+        options.SubstituteApiVersionInUrl = true;
+    });
+
 //Don`t update package to preview versions & change connectionString (Environment.GetEnvironmentVariable("CONNECTION_STRING"))
 builder.Services.AddDbContext<ApplicationContext>(options => { options.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING"), b => b.MigrationsAssembly("WASA-API")); });
 
@@ -63,12 +83,22 @@ Console.WriteLine(builder.Environment.EnvironmentName);
 var app = builder.Build();
 
 
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
-    app.UseSwaggerUI();
-//}
+    app.UseSwaggerUI(options =>
+    {
+        var descriptions = app.DescribeApiVersions();
+
+        // Build a swagger endpoint for each discovered API version
+        foreach (var description in descriptions)
+        {
+            var url = $"/swagger/{description.GroupName}/swagger.json";
+            var name = description.GroupName.ToUpperInvariant();
+            options.SwaggerEndpoint(url, name);
+        }
+    });
+}
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
