@@ -4,5 +4,5 @@ services:
         context: .
         dockerfile: Dockerfile  
     ports:
-        - "5083:5083"
+        - "5000:5000"
     container_name: wasa_api
