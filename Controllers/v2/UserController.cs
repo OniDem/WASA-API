@@ -1,8 +1,11 @@
 ﻿using Asp.Versioning;
 using DTO.Shift;
 using DTO.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services;
+using Microsoft.IdentityModel.Tokens;
+using Services.v2;
+using System.IdentityModel.Tokens.Jwt;
 using WASA_CoreLib.Entity;
 
 namespace WASA_API.Controllers.v2
@@ -19,6 +22,17 @@ namespace WASA_API.Controllers.v2
             _userService = userService;
         }
 
+        private string GetToken()
+        {
+            var jwt = new JwtSecurityToken(
+            issuer: AuthOptions.ISSUER,
+            audience: AuthOptions.AUDIENCE,
+            expires: null,
+            signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+
+            return new JwtSecurityTokenHandler().WriteToken(jwt);
+        }
+
         [MapToApiVersion("2.0")]
         [HttpPost]
         public async Task<ServerResponseEntity> RegUser(RegUserRequest request)
@@ -27,7 +41,10 @@ namespace WASA_API.Controllers.v2
             {
                 var data = await _userService.RegUser(request);
                 if (data != null)
+                {
+                    data.Token = GetToken();
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                }
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
@@ -41,13 +58,17 @@ namespace WASA_API.Controllers.v2
             {
                 var data = await _userService.AuthUser(request);
                 if (data != null)
+                {
+                    data.Token = GetToken();
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                }
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
         [MapToApiVersion("2.0")]
+        [Authorize]
         [HttpPost]
         public async Task<ServerResponseEntity> GrantAccessUser(GrantAccessUserRequest request)
         {
@@ -62,6 +83,7 @@ namespace WASA_API.Controllers.v2
         }
 
         [MapToApiVersion("2.0")]
+        [Authorize]
         [HttpPut]
         public async Task<ServerResponseEntity> UpdateUser(int id, UpdateUserRequest request)
         {
@@ -77,6 +99,7 @@ namespace WASA_API.Controllers.v2
 
 
         [MapToApiVersion("2.0")]
+        [Authorize]
         [HttpPost]
         public async Task<ServerResponseEntity> GetUserDataById(ShowByIdRequest request)
         {
@@ -91,6 +114,7 @@ namespace WASA_API.Controllers.v2
         }
 
         [MapToApiVersion("2.0")]
+        [Authorize]
         [HttpDelete]
         public async Task DeleteUser(int id)
         {

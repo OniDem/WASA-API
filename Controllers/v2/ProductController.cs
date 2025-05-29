@@ -1,7 +1,8 @@
 ﻿using Asp.Versioning;
 using DTO.Product;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services;
+using Services.v2;
 using WASA_CoreLib.Entity;
 using WASA_DTOLib.Compatible;
 using WASA_DTOLib.Product;
@@ -10,6 +11,7 @@ namespace WASA_API.Controllers.v2
 {
     [ApiVersion("2.0", Deprecated = false)]
     [ApiController]
+    [Authorize]
     [Route("api/v{version:apiversion}/[controller]/[action]")]
     public class ProductController : ControllerBase
     {
