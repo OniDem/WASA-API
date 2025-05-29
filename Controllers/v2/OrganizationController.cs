@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services;
+using Services.v2;
 using WASA_CoreLib.Entity;
 using WASA_DTOLib.Organization;
 
@@ -8,6 +9,7 @@ namespace WASA_API.Controllers.v2
 {
     [ApiVersion("2.0", Deprecated = false)]
     [ApiController]
+    [Authorize]
     [Route("api/v{version:apiversion}/[controller]/[action]")]
     public class OrganizationController : ControllerBase
     {
