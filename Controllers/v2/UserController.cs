@@ -1,13 +1,15 @@
-﻿using DTO.Shift;
+﻿using Asp.Versioning;
+using DTO.Shift;
 using DTO.User;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using WASA_CoreLib.Entity;
 
-namespace WASA_API.Controllers
+namespace WASA_API.Controllers.v2
 {
+    [ApiVersion("2.0", Deprecated = false)]
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/v{version:apiversion}/[controller]/[action]")]
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
@@ -17,6 +19,7 @@ namespace WASA_API.Controllers
             _userService = userService;
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPost]
         public async Task<ServerResponseEntity> RegUser(RegUserRequest request)
         {
@@ -30,6 +33,7 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPost]
         public async Task<ServerResponseEntity> AuthUser(AuthUserRequest request)
         {
@@ -43,6 +47,7 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPost]
         public async Task<ServerResponseEntity> GrantAccessUser(GrantAccessUserRequest request)
         {
@@ -56,6 +61,7 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPut]
         public async Task<ServerResponseEntity> UpdateUser(int id, UpdateUserRequest request)
         {
@@ -70,6 +76,7 @@ namespace WASA_API.Controllers
         }
 
 
+        [MapToApiVersion("2.0")]
         [HttpPost]
         public async Task<ServerResponseEntity> GetUserDataById(ShowByIdRequest request)
         {
@@ -83,6 +90,7 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
         [HttpDelete]
         public async Task DeleteUser(int id)
         {

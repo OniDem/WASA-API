@@ -1,43 +1,30 @@
-﻿using Core.Entity;
+﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using WASA_CoreLib.Entity;
-using WASA_CoreLib.ShowEntity;
-using WASA_DTOLib.Category;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using WASA_DTOLib.SharedData;
 
-namespace WASA_API.Controllers
+namespace WASA_API.Controllers.v2
 {
+    [ApiVersion("2.0", Deprecated = false)]
     [ApiController]
-    [Route("[controller]/[action]")]
-    public class CategoryController : ControllerBase
+    [Route("api/v{version:apiversion}/[controller]/[action]")]
+    public class SharedDataController : ControllerBase
     {
-        private readonly CategoryService _categoryService;
+        private readonly SharedDataService _sharedDataService;
 
-        public CategoryController(CategoryService categoryService)
+        public SharedDataController(SharedDataService sharedDataService)
         {
-            _categoryService = categoryService;
+            _sharedDataService = sharedDataService;
         }
 
-        [HttpPost]
-        public async Task<ServerResponseEntity> GetAll()
+        [MapToApiVersion("2.0")]
+        [HttpPut]
+        public async Task<ServerResponseEntity> Update(SharedDataRequest request)
         {
             if (ModelState.IsValid)
             {
-                var data = await _categoryService.GetAll();
-                if(data != null)
-                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
-                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
-            }
-            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
-        }
-
-        [HttpPost]
-        public async Task<ServerResponseEntity> Add(AddCategoryRequest request)
-        {
-            if (ModelState.IsValid)
-            {
-                var data = await _categoryService.Add(request);
+                var data = await _sharedDataService.Update(request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -45,13 +32,18 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
-        //[HttpDelete]
-        //public async Task Delete(DeleteCategoryRequest request)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        return _categoryService.Delete(request);
-        //    }
-        //}
+        [MapToApiVersion("2.0")]
+        [HttpPost]
+        public async Task<ServerResponseEntity> GetData(SharedDataRequest request)
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _sharedDataService.GetData(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
+            }
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
+        }
     }
 }

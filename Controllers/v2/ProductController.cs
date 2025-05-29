@@ -1,41 +1,32 @@
-﻿using DTO.Shift;
+﻿using Asp.Versioning;
+using DTO.Product;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using WASA_CoreLib.Entity;
-using WASA_DTOLib.Organization;
+using WASA_DTOLib.Compatible;
+using WASA_DTOLib.Product;
 
-namespace WASA_API.Controllers
+namespace WASA_API.Controllers.v2
 {
+    [ApiVersion("2.0", Deprecated = false)]
     [ApiController]
-    [Route("[controller]/[action]")]
-    public class OrganizationController : ControllerBase
+    [Route("api/v{version:apiversion}/[controller]/[action]")]
+    public class ProductController : ControllerBase
     {
-        private readonly OrganizationService _organizationService;
+        private readonly ProductService _productService;
 
-        public OrganizationController(OrganizationService organizationService)
+        public ProductController(ProductService productService)
         {
-            _organizationService = organizationService;
+            _productService = productService;
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPost]
-        public async Task<ServerResponseEntity> Create(AddOrganizationRequest request)
-        {
-            if(ModelState.IsValid)
-            {
-                var data = await _organizationService.Create(request);
-                if (data != null)
-                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
-                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
-            }
-            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
-        }
-
-        [HttpPut]
-        public async Task<ServerResponseEntity> AddBilling(AddBillingRequest request)
+        public async Task<ServerResponseEntity> Add(AddProductRequest request)
         {
             if (ModelState.IsValid)
             {
-                var data = await _organizationService.AddBilling(request);
+                var data = await _productService.AddProduct(request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -43,12 +34,13 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPut]
-        public async Task<ServerResponseEntity> AddStaff(AddStaffRequest request)
+        public async Task<ServerResponseEntity> Update(UpdateProductRequest request)
         {
             if (ModelState.IsValid)
             {
-                var data = await _organizationService.AddStaff(request);
+                var data = await _productService.UpdateProduct(request.ProductCode, request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -56,25 +48,13 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
-        [HttpPut]
-        public async Task<ServerResponseEntity> AddShift(AddShiftRequest request)
-        {
-            if (ModelState.IsValid)
-            {
-                var data = await _organizationService.AddShift(request);
-                if (data != null)
-                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
-                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
-            }
-            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
-        }
-
+        [MapToApiVersion("2.0")]
         [HttpPost]
-        public async Task<ServerResponseEntity> ShowById(DTO.Shift.ShowByIdRequest request)
+        public async Task<ServerResponseEntity> ShowByProductCode(GetProductByCodeRequest request)
         {
             if (ModelState.IsValid)
             {
-                var data = await _organizationService.ShowById(new() { OrganizationId = request.Id });
+                var data = await _productService.ShowByProductCode(request.ProductCode);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -82,12 +62,27 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
+        [HttpPut]
+        public async Task<ServerResponseEntity> ProductDeduction(DeductionProductRequest request)
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _productService.ProductDeduction(request);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
+            }
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
+        }
+
+        [MapToApiVersion("2.0")]
         [HttpPost]
         public async Task<ServerResponseEntity> ShowAll()
         {
             if (ModelState.IsValid)
             {
-                var data = await _organizationService.ShowAll();
+                var data = await _productService.ShowAll();
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -95,12 +90,13 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPost]
-        public async Task<ServerResponseEntity> CashBoxOperation(CashBoxOperationRequest request)
+        public async Task<ServerResponseEntity> ShowAllModelCodes()
         {
             if (ModelState.IsValid)
             {
-                var data = await _organizationService.CashBoxOperation(request);
+                var data = await _productService.ShowAllModelCodes();
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -108,13 +104,55 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
-
-        [HttpDelete]
-        public void Delete(DeleteOrganizationRequest request)
+        [MapToApiVersion("2.0")]
+        [HttpPost]
+        public async Task<ServerResponseEntity> ShowByCategory(GetProductByQueryRequest request)
         {
             if (ModelState.IsValid)
             {
-                _organizationService.Delete(request);
+                var data = await _productService.ShowByCategory(request.Query);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
+            }
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
+        }
+
+        [MapToApiVersion("2.0")]
+        [HttpPost]
+        public async Task<ServerResponseEntity> ShowByQuery(GetProductByQueryRequest request)
+        {   
+            if (ModelState.IsValid)
+            {
+                var data = await _productService.ShowByQuery(request.Query);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
+            }
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
+        }
+
+        [MapToApiVersion("2.0")]
+        [HttpPost]
+        public async Task<ServerResponseEntity> ShowByModelCodes(GetModelsByModelCodeRequest request)
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _productService.ShowByModelCodes(request.ModelCode);
+                if (data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
+            }
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
+        }
+
+        [MapToApiVersion("2.0")]
+        [HttpDelete]
+        public void Delete(DeleteProductRequest request)
+        {
+            if(ModelState.IsValid)
+            {
+                _productService.Delete(request.ProductCode);
             }
         }
     }
