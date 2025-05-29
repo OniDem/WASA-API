@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Services;
 using StudentsManagementApi.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using WASA_InfrastructureLib.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,9 +15,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 builder.Services.AddSwaggerGen(opt =>
 {
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "WASA-API", Version = "Dev1.3.1" });
+    opt.OperationFilter<SwaggerDefaultValues>();
+    
     opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -40,24 +46,21 @@ builder.Services.AddSwaggerGen(opt =>
             new string[]{}
         }
     });
-    opt.OperationFilter<SwaggerDefaultValues>();
 });
 
-builder.Services.AddApiVersioning(opt =>
+builder.Services.AddApiVersioning(options =>
 {
-    opt.DefaultApiVersion = new ApiVersion(1, 0);
-    opt.AssumeDefaultVersionWhenUnspecified = true;
-    opt.ReportApiVersions = true;
-    opt.ApiVersionReader = new UrlSegmentApiVersionReader();
-
-    //ApiVersionReader.Combine(new HeaderApiVersionReader("x-api-version"), new QueryStringApiVersionReader("api-version"));
-});
-builder.Services.AddApiVersioning().AddApiExplorer(options =>
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.ReportApiVersions = true;
+}).AddMvc().AddApiExplorer(
+    options =>
     {
+
         options.GroupNameFormat = "'v'VVV";
         options.SubstituteApiVersionInUrl = true;
-    });
-
+    }
+);
 //Don`t update package to preview versions & change connectionString (Environment.GetEnvironmentVariable("CONNECTION_STRING"))
 builder.Services.AddDbContext<ApplicationContext>(options => { options.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING"), b => b.MigrationsAssembly("WASA-API")); });
 
@@ -83,22 +86,19 @@ Console.WriteLine(builder.Environment.EnvironmentName);
 var app = builder.Build();
 
 
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        var descriptions = app.DescribeApiVersions();
+    var descriptions = app.DescribeApiVersions();
 
-        // Build a swagger endpoint for each discovered API version
-        foreach (var description in descriptions)
-        {
-            var url = $"/swagger/{description.GroupName}/swagger.json";
-            var name = description.GroupName.ToUpperInvariant();
-            options.SwaggerEndpoint(url, name);
-        }
-    });
-}
+    // Build a swagger endpoint for each discovered API version
+    foreach (var description in descriptions)
+    {
+        var url = $"/swagger/{description.GroupName}/swagger.json";
+        var name = description.GroupName.ToUpperInvariant();
+        options.SwaggerEndpoint(url, name);
+    }
+});
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

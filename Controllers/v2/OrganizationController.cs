@@ -1,32 +1,30 @@
-﻿using Core.Const;
-using Core.Entity;
-using DTO.Receipt;
-using DTO.User;
+﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using WASA_CoreLib.Entity;
-using WASA_DTOLib.Receipt;
+using WASA_DTOLib.Organization;
 
-namespace WASA_API.Controllers
+namespace WASA_API.Controllers.v2
 {
+    [ApiVersion("2.0", Deprecated = false)]
     [ApiController]
-    [Route("[controller]/[action]")]
-    public class ReceiptController : ControllerBase
+    [Route("api/v{version:apiversion}/[controller]/[action]")]
+    public class OrganizationController : ControllerBase
     {
+        private readonly OrganizationService _organizationService;
 
-        private readonly ReceiptService _receiptService;
-
-        public ReceiptController(ReceiptService receiptService)
+        public OrganizationController(OrganizationService organizationService)
         {
-            _receiptService = receiptService;
+            _organizationService = organizationService;
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPost]
-        public async Task<ServerResponseEntity> Add(AddReceiptRequest request)
+        public async Task<ServerResponseEntity> Create(AddOrganizationRequest request)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                var data =  await _receiptService.Add(request);
+                var data = await _organizationService.Create(request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -34,12 +32,13 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPut]
-        public async Task<ServerResponseEntity> Close([FromBody] GetReceiptByIdRequest request)
+        public async Task<ServerResponseEntity> AddBilling(AddBillingRequest request)
         {
             if (ModelState.IsValid)
             {
-                var data = await _receiptService.Close(request);
+                var data = await _organizationService.AddBilling(request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -47,12 +46,13 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPut]
-        public async Task<ServerResponseEntity> Payment(PaymentReceiptRequest request)
+        public async Task<ServerResponseEntity> AddStaff(AddStaffRequest request)
         {
             if (ModelState.IsValid)
             {
-                var data = await _receiptService.Payment(request);
+                var data = await _organizationService.AddStaff(request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -60,12 +60,13 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPut]
-        public async Task<ServerResponseEntity> Cancel(CancelReceiptRequest request)
+        public async Task<ServerResponseEntity> AddShift(AddShiftRequest request)
         {
             if (ModelState.IsValid)
             {
-                var data = await _receiptService.Cancel(request);
+                var data = await _organizationService.AddShift(request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -73,25 +74,13 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
-        [HttpPut]
-        public async Task<ServerResponseEntity> AddProducts(AddProductToReceiptRequest request)
-        {
-            if (ModelState.IsValid)
-            {
-                var data = await _receiptService.AddProducts(request);
-                if (data != null)
-                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
-                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
-            }
-            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
-        }
-
+        [MapToApiVersion("2.0")]
         [HttpPost]
-        public async Task<ServerResponseEntity> ShowById(GetReceiptByIdRequest request)
+        public async Task<ServerResponseEntity> ShowById(DTO.Shift.ShowByIdRequest request)
         {
             if (ModelState.IsValid)
             {
-                var data = await _receiptService.ShowById(request.Id);
+                var data = await _organizationService.ShowById(new() { OrganizationId = request.Id });
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -99,12 +88,13 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPost]
-        public async Task<ServerResponseEntity> ShowCreatedByDate(ShowReceiptByDateRequest request)
+        public async Task<ServerResponseEntity> ShowAll()
         {
             if (ModelState.IsValid)
             {
-                var data = await _receiptService.ShowCreatedByDate(request.Date!.Value);
+                var data = await _organizationService.ShowAll();
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -112,12 +102,13 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPost]
-        public async Task<ServerResponseEntity> ShowClosedByDate(ShowReceiptByDateRequest request)
+        public async Task<ServerResponseEntity> CashBoxOperation(CashBoxOperationRequest request)
         {
             if (ModelState.IsValid)
             {
-                var data = await _receiptService.ShowClosedByDate(request.Date!.Value);
+                var data = await _organizationService.CashBoxOperation(request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -125,17 +116,15 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
-        [HttpPost]
-        public async Task<ServerResponseEntity> ShowPaymentByDate(ShowReceiptByDateRequest request)
+
+        [MapToApiVersion("2.0")]
+        [HttpDelete]
+        public void Delete(DeleteOrganizationRequest request)
         {
             if (ModelState.IsValid)
             {
-                var data = await _receiptService.ShowPaymentByDate(request.Date!.Value);
-                if (data != null)
-                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
-                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
+                _organizationService.Delete(request);
             }
-            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
     }
 }

@@ -1,45 +1,58 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using Services;
 using WASA_CoreLib.Entity;
-using WASA_DTOLib.SharedData;
+using WASA_DTOLib.Category;
 
-namespace WASA_API.Controllers
+namespace WASA_API.Controllers.v2
 {
+    [ApiVersion("2.0", Deprecated = false)]
     [ApiController]
-    [Route("[controller]/[action]")]
-    public class SharedDataController : ControllerBase
+    [Route("api/v{version:apiversion}/[controller]/[action]")]
+    public class CategoryController : ControllerBase
     {
-        private readonly SharedDataService _sharedDataService;
+        private readonly CategoryService _categoryService;
 
-        public SharedDataController(SharedDataService sharedDataService)
+        public CategoryController(CategoryService categoryService)
         {
-            _sharedDataService = sharedDataService;
+            _categoryService = categoryService;
         }
 
-        [HttpPut]
-        public async Task<ServerResponseEntity> Update(SharedDataRequest request)
-        {
-            if (ModelState.IsValid)
-            {
-                var data = await _sharedDataService.Update(request);
-                if (data != null)
-                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
-                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
-            }
-            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
-        }
-
+        [MapToApiVersion("2.0")]
         [HttpPost]
-        public async Task<ServerResponseEntity> GetData(SharedDataRequest request)
+        public async Task<ServerResponseEntity> GetAll()
         {
             if (ModelState.IsValid)
             {
-                var data = await _sharedDataService.GetData(request);
+                var data = await _categoryService.GetAll();
+                if(data != null)
+                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
+            }
+            return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
+        }
+
+        [MapToApiVersion("2.0")]
+        [HttpPost]
+        public async Task<ServerResponseEntity> Add(AddCategoryRequest request)
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _categoryService.Add(request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
+
+        //[HttpDelete]
+        //public async Task Delete(DeleteCategoryRequest request)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        return _categoryService.Delete(request);
+        //    }
+        //}
     }
 }

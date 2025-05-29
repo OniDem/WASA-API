@@ -1,12 +1,14 @@
-﻿using DTO.Shift;
+﻿using Asp.Versioning;
+using DTO.Shift;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using WASA_CoreLib.Entity;
 
-namespace WASA_API.Controllers
+namespace WASA_API.Controllers.v2
 {
+    [ApiVersion("2.0", Deprecated = false)]
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/v{version:apiversion}/[controller]/[action]")]
     public class ShiftController : ControllerBase
     {
         private readonly ShiftService _shiftService;
@@ -16,6 +18,7 @@ namespace WASA_API.Controllers
             _shiftService = shiftService;
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPost]
         public async Task<ServerResponseEntity> OpenShift(OpenShiftRequest request)
         {
@@ -30,6 +33,7 @@ namespace WASA_API.Controllers
 
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPut]
         public async Task<ServerResponseEntity> CloseShift(CloseShiftRequest request)
         {
@@ -43,6 +47,7 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPost]
         public async Task<ServerResponseEntity> ShowById(ShowByIdRequest request)
         {
@@ -56,6 +61,7 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPost]
         public async Task<ServerResponseEntity> ShowAll()
         {
@@ -69,6 +75,7 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPut]
         public async Task<ServerResponseEntity> AddReceiptToShift(AddReceiptToShiftRequest request)
         {
@@ -82,6 +89,7 @@ namespace WASA_API.Controllers
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
 
+        [MapToApiVersion("2.0")]
         [HttpPut]
         public async Task<ServerResponseEntity> AcquiringApprove(AcquiringApproveRequest request)
         {
