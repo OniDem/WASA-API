@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Services.v2;
 using System.IdentityModel.Tokens.Jwt;
 using WASA_CoreLib.Entity;
+using System.Security.Claims;
 
 namespace WASA_API.Controllers.v2
 {
@@ -22,12 +23,14 @@ namespace WASA_API.Controllers.v2
             _userService = userService;
         }
 
-        private string GetToken()
+        private string GetToken(AuthorizedUserDataEntity data)
         {
+            var claims = new List<Claim> { new( ClaimTypes.Name, data.Id.ToString()) };
             var jwt = new JwtSecurityToken(
             issuer: AuthOptions.ISSUER,
             audience: AuthOptions.AUDIENCE,
             expires: null,
+            claims: claims,
             signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
@@ -39,10 +42,12 @@ namespace WASA_API.Controllers.v2
         {
             if (ModelState.IsValid)
             {
+
+                request.Password = await EncryptService.EncryptStringAsync(request.Password, Environment.GetEnvironmentVariable("ENCRYPTKEY")!);
                 var data = await _userService.RegUser(request);
                 if (data != null)
                 {
-                    data.Token = GetToken();
+                    data.Token = GetToken(data);
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 }
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
@@ -59,7 +64,7 @@ namespace WASA_API.Controllers.v2
                 var data = await _userService.AuthUser(request);
                 if (data != null)
                 {
-                    data.Token = GetToken();
+                    data.Token = GetToken(data);
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 }
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
