@@ -61,11 +61,15 @@ namespace WASA_API.Controllers.v2
         {
             if (ModelState.IsValid)
             {
+                request.Password = await EncryptService.EncryptStringAsync(request.Password, Environment.GetEnvironmentVariable("ENCRYPTKEY")!);
                 var data = await _userService.AuthUser(request);
                 if (data != null)
                 {
-                    data.Token = GetToken(data);
-                    return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                    if(data.Id > 0)
+                    {
+                        data.Token = GetToken(data);
+                        return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
+                    }
                 }
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
             }

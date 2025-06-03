@@ -13,23 +13,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            
-            // строка, представляющая издателя
-            ValidIssuer = AuthOptions.ISSUER,
-            // установка потребителя токена
-            ValidAudience = AuthOptions.AUDIENCE,
-            // установка ключа безопасности
-            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-            // валидация ключа безопасности
-            ValidateIssuerSigningKey = true,
-        };
-    });
+
 
 
 // Add services to the container.
@@ -43,7 +27,7 @@ builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwa
 builder.Services.AddSwaggerGen(opt =>
 {
     opt.OperationFilter<SwaggerDefaultValues>();
-    
+
     opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -120,12 +104,28 @@ builder.Services.AddScoped<Services.v2.CategoryService>();
 builder.Services.AddScoped<Services.v2.SharedDataService>();
 builder.Services.AddScoped<Services.v2.OrganizationService>();
 builder.Services.AddScoped<Services.v2.CompatibleService>();
-Console.WriteLine(builder.Environment.EnvironmentName);
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = AuthOptions.ISSUER,
+            ValidateAudience = true,
+            ValidAudience = AuthOptions.AUDIENCE,
+            ValidateLifetime = false,
+            RequireExpirationTime = false,
+            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+            ValidateIssuerSigningKey = true,
+        };
+    });
+
+
+
 
 var app = builder.Build();
 
-app.UseAuthentication();
-app.UseAuthorization();
+
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>
@@ -140,8 +140,8 @@ app.UseSwaggerUI(options =>
         options.SwaggerEndpoint(url, name);
     }
 });
-app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
