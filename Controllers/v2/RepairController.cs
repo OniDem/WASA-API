@@ -35,9 +35,7 @@ namespace WASA_API.Controllers.v2
             catch (Exception ex)
             {
                 return new() { StatusCode = System.Net.HttpStatusCode.InternalServerError, Message = "Ошибка на сервере" };
-            }
-            
-            
+            } 
         }
 
         [MapToApiVersion("2.0")]
