@@ -6,6 +6,7 @@ using DTO.User;
 using Microsoft.AspNetCore.Mvc;
 using Services.v1;
 using WASA_CoreLib.Entity;
+using WASA_DTOLib.General;
 using WASA_DTOLib.Receipt;
 
 namespace WASA_API.Controllers.v1
@@ -39,7 +40,7 @@ namespace WASA_API.Controllers.v1
 
         [MapToApiVersion("1.0")]
         [HttpPut]
-        public async Task<ServerResponseEntity> Close([FromBody] GetReceiptByIdRequest request)
+        public async Task<ServerResponseEntity> Close([FromBody] ShowByIdRequest request)
         {
             if (ModelState.IsValid)
             {
@@ -95,11 +96,11 @@ namespace WASA_API.Controllers.v1
 
         [MapToApiVersion("1.0")]
         [HttpPost]
-        public async Task<ServerResponseEntity> ShowById(GetReceiptByIdRequest request)
+        public async Task<ServerResponseEntity> ShowById(ShowByIdRequest request)
         {
             if (ModelState.IsValid)
             {
-                var data = await _receiptService.ShowById(request.Id);
+                var data = await _receiptService.ShowById(request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };

@@ -4,6 +4,7 @@ using DTO.User;
 using Microsoft.AspNetCore.Mvc;
 using Services.v1;
 using WASA_CoreLib.Entity;
+using WASA_DTOLib.General;
 
 namespace WASA_API.Controllers.v1
 {

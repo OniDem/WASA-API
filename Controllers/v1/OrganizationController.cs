@@ -3,6 +3,7 @@ using DTO.Shift;
 using Microsoft.AspNetCore.Mvc;
 using Services.v1;
 using WASA_CoreLib.Entity;
+using WASA_DTOLib.General;
 using WASA_DTOLib.Organization;
 
 namespace WASA_API.Controllers.v1
@@ -77,11 +78,11 @@ namespace WASA_API.Controllers.v1
 
         [MapToApiVersion("1.0")]
         [HttpPost]
-        public async Task<ServerResponseEntity> ShowById(DTO.Shift.ShowByIdRequest request)
+        public async Task<ServerResponseEntity> ShowById(ShowByIdRequest request)
         {
             if (ModelState.IsValid)
             {
-                var data = await _organizationService.ShowById(new() { OrganizationId = request.Id });
+                var data = await _organizationService.ShowById(request);
                 if (data != null)
                     return new() { StatusCode = System.Net.HttpStatusCode.OK, Data = data, Message = "Обработано успешно" };
                 return new() { StatusCode = System.Net.HttpStatusCode.NoContent, Message = "Произошла ошибка при обработке запроса сервером" };
