@@ -86,6 +86,7 @@ builder.Services.AddScoped<WASA_InfrastructureLib.Repositories.v2.CategoryReposi
 builder.Services.AddScoped<WASA_InfrastructureLib.Repositories.v2.SharedDataRepository>();
 builder.Services.AddScoped<WASA_InfrastructureLib.Repositories.v2.OrganizationRepository>();
 builder.Services.AddScoped<WASA_InfrastructureLib.Repositories.v2.CompatibleRepository>();
+builder.Services.AddScoped<WASA_InfrastructureLib.Repositories.v2.RepairRepository>();
 
 builder.Services.AddScoped<Services.v1.UserService>();
 builder.Services.AddScoped<Services.ProductService>();
@@ -104,6 +105,7 @@ builder.Services.AddScoped<Services.v2.CategoryService>();
 builder.Services.AddScoped<Services.v2.SharedDataService>();
 builder.Services.AddScoped<Services.v2.OrganizationService>();
 builder.Services.AddScoped<Services.v2.CompatibleService>();
+builder.Services.AddScoped<Services.v2.RepairService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

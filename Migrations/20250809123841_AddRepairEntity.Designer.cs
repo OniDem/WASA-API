@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace WASA_API.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20250809123841_AddRepairEntity")]
+    partial class AddRepairEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -356,13 +359,11 @@ namespace WASA_API.Migrations
                     b.Property<bool>("ContractSign")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("ContractSignAt")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<DateTime>("ContractSignAt")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CreationAt")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<DateTime>("CreationAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DiagnosticResultLong")
                         .HasColumnType("text");
@@ -373,9 +374,8 @@ namespace WASA_API.Migrations
                     b.Property<double>("EstimatedCost")
                         .HasColumnType("double precision");
 
-                    b.Property<string>("GetObjectAt")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<DateTime>("GetObjectAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("IMEI")
                         .HasColumnType("text");
@@ -386,9 +386,8 @@ namespace WASA_API.Migrations
                     b.Property<bool>("IsDiagnostic")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("IssueAt")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<DateTime>("IssueAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("MainIsReceipted")
                         .HasColumnType("boolean");
@@ -434,9 +433,9 @@ namespace WASA_API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<List<string>>("RepairStatuses")
+                    b.Property<int[]>("RepairStatuses")
                         .IsRequired()
-                        .HasColumnType("text[]");
+                        .HasColumnType("integer[]");
 
                     b.Property<int>("RepairTime")
                         .HasColumnType("integer");
