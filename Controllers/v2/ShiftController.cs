@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.v2;
 using WASA_CoreLib.Entity;
+using WASA_DTOLib.General;
 
 namespace WASA_API.Controllers.v2
 {

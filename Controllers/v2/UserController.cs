@@ -8,6 +8,7 @@ using Services.v2;
 using System.IdentityModel.Tokens.Jwt;
 using WASA_CoreLib.Entity;
 using System.Security.Claims;
+using WASA_DTOLib.General;
 
 namespace WASA_API.Controllers.v2
 {
