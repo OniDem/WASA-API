@@ -44,7 +44,13 @@ namespace WASA_API.Controllers.v2
         {
             if (ModelState.IsValid)
             {
-                return await _repairService.UpdateRepairEntity(request);
+                try
+                {
+                    return await _repairService.UpdateRepairEntity(request);
+                }
+                catch (Exception ex)
+                {
+                }
             }
             return new() { StatusCode = System.Net.HttpStatusCode.BadRequest, Message = "Были отправлены некорректные данные" };
         }
